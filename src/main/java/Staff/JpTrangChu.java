@@ -1,0 +1,324 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package Staff;
+
+import Database.DatabaseManager;
+import Entity.Staff;
+import java.beans.Statement;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
+/**
+ *
+ * @author Dell
+ */
+public class JpTrangChu extends javax.swing.JPanel {
+
+    /**
+     * Creates new form JpTrangChu
+     */
+    
+    private DatabaseManager database = new DatabaseManager("BitSneaker");
+    
+    static DefaultTableModel dtm;
+    
+    private ArrayList<Staff> listStaff;
+    
+    public JpTrangChu(ArrayList<Staff> list) {
+        
+        this.listStaff = list;
+        
+        initComponents();
+        inDanhSachNhanVienDangHoatDong(true);
+        layDSSP();
+        
+    }
+    public void inDanhSachNhanVienDangHoatDong(boolean status){
+        
+        DefaultTableModel dtm = (DefaultTableModel) tblDanhSachNhanVien.getModel();
+        dtm.setNumRows(0);
+        Vector vt;
+        try {
+//          ResultSet rs = database.queryData("SELECT StaffID,  CONCAT_WS(' ',FirstName,LastName) FROM (SELECT AccountID, Status FROM ACCOUNT WHERE Status=('"+status+"')) AS Acc  INNER JOIN (SELECT StaffID,AccountID, FirstName, LastName FROM STAFF) AS Staff ON Acc.AccountID = Staff.AccountID");
+          for(Staff s:this.listStaff){
+               vt = new Vector();
+               vt.add(s.getStaffID());
+               vt.add(s.getfName()+" "+s.getlName());
+               dtm.addRow(vt);
+           }
+           tblDanhSachNhanVien.setModel(dtm);
+        } catch (Exception e) {
+            //System.out.println("IN DANH SACH THAT BAI");
+            e.printStackTrace();
+        }
+    }
+    
+    public int kiemTraMaSPTonTai(String sneakerID) {       
+        
+        int tonTai = 0;
+        String sql = "SELECT * FROM SNEAKER WHERE SneakerID ='" + sneakerID + "'";
+        try {
+            
+            ResultSet rs = database.queryData(sql);
+            if(rs.next()){
+                tonTai = 1;
+            }
+            rs.close();
+            
+        }
+        catch (SQLException ex) {
+            Logger.getLogger(JpTaoHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return tonTai;
+    }
+    
+    public void inSPSearch(String sneakerID){
+        DefaultTableModel dtm = (DefaultTableModel) tblDSSP.getModel();
+        dtm.setNumRows(0);
+        Vector vt;
+        
+        String sql = "SELECT * FROM SNEAKER WHERE SneakerID = '"+sneakerID+"'";
+        try {
+            
+            ResultSet rs = database.queryData(sql);
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString("SneakerID"));
+                vt.add(rs.getString("Image"));
+                vt.add(rs.getString("Name"));
+                vt.add(rs.getString("Brand"));
+                vt.add(rs.getString("Color"));
+                vt.add(rs.getString("Size"));
+                vt.add(rs.getString("Amount"));
+                vt.add(rs.getString("Unit"));
+                vt.add(rs.getString("Category"));
+                vt.add(rs.getString("Description"));
+                dtm.addRow(vt);           
+                tblDSSP.setModel(dtm);
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(JpTaoHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+    }
+    
+    public void layDSSP(){
+        DefaultTableModel dtm = (DefaultTableModel) tblDSSP.getModel();
+        dtm.setNumRows(0);
+        Vector vt;
+        
+        String sql = "SELECT * FROM SNEAKER";
+        try {
+            
+            ResultSet rs = database.queryData(sql);
+            while(rs.next()){
+                vt = new Vector();
+                vt.add(rs.getString("SneakerID"));
+                vt.add(rs.getString("Image"));
+                vt.add(rs.getString("Name"));
+                vt.add(rs.getString("Brand"));
+                vt.add(rs.getString("Color"));
+                vt.add(rs.getString("Size"));
+                vt.add(rs.getString("Amount"));
+                vt.add(rs.getString("Unit"));
+                vt.add(rs.getString("Category"));
+                vt.add(rs.getString("Description"));
+                dtm.addRow(vt);           
+                tblDSSP.setModel(dtm);
+            } 
+        } catch (SQLException ex) {
+            Logger.getLogger(JpTaoHoaDon.class.getName()).log(Level.SEVERE, null, ex);
+        }       
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        lblDanhSachNhanVien1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblDanhSachNhanVien = new javax.swing.JTable();
+        txtSearch = new javax.swing.JTextField();
+        lblSearch = new javax.swing.JLabel();
+        lblDanhSachNhanVien2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblDSSP = new javax.swing.JTable();
+
+        setBackground(new java.awt.Color(255, 255, 255));
+
+        lblDanhSachNhanVien1.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        lblDanhSachNhanVien1.setText("DANH SÁCH TÀI KHOẢN NHÂN VIÊN ĐANG HOẠT ĐỘNG");
+
+        tblDanhSachNhanVien.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        tblDanhSachNhanVien.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã nhân viên", "Tên"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDanhSachNhanVien.setSelectionBackground(new java.awt.Color(204, 204, 255));
+        jScrollPane2.setViewportView(tblDanhSachNhanVien);
+
+        txtSearch.setFont(new java.awt.Font("Consolas", 2, 11)); // NOI18N
+        txtSearch.setText("Search...");
+        txtSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                txtSearchMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                txtSearchMouseEntered(evt);
+            }
+        });
+
+        lblSearch.setIcon(new javax.swing.ImageIcon("src//main//java//res//iconStaff//search2.png"));
+        lblSearch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSearchMouseClicked(evt);
+            }
+        });
+
+        lblDanhSachNhanVien2.setFont(new java.awt.Font("Times New Roman", 3, 14)); // NOI18N
+        lblDanhSachNhanVien2.setText("DANH SÁCH SẢN PHẨM");
+
+        tblDSSP.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Mã sản phẩm", "Hình ảnh", "Tên sản phẩm", "Brand", "Màu", "Size", "Số lượng", "Đơn vị", "Phân loại", "Mô tả"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblDSSP.setSelectionBackground(new java.awt.Color(204, 204, 255));
+        jScrollPane1.setViewportView(tblDSSP);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(267, 267, 267)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDanhSachNhanVien1)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 996, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 10, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(330, 330, 330))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(428, 428, 428)
+                .addComponent(lblDanhSachNhanVien2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblDanhSachNhanVien1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblDanhSachNhanVien2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void txtSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseClicked
+        // TODO add your handling code here:
+        if(txtSearch.getText().equals("Search...")){
+            txtSearch.setText("");
+        }
+    }//GEN-LAST:event_txtSearchMouseClicked
+
+    private void txtSearchMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtSearchMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchMouseEntered
+
+    private void lblSearchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSearchMouseClicked
+        // TODO add your handling code here:
+        String search = txtSearch.getText();
+        if(search.equals("")){
+            JOptionPane.showMessageDialog(this, "Bạn chưa nhập mã sản phẩm cần tìm");
+        }
+        else if(kiemTraMaSPTonTai(search) == 0) {
+            JOptionPane.showMessageDialog(this, "Sản phẩm này không tồn tại");
+        }
+        else {
+            DefaultTableModel dtm = (DefaultTableModel) tblDSSP.getModel();
+            this.inSPSearch(search);
+        }
+    }//GEN-LAST:event_lblSearchMouseClicked
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblDanhSachNhanVien1;
+    private javax.swing.JLabel lblDanhSachNhanVien2;
+    private javax.swing.JLabel lblSearch;
+    private javax.swing.JTable tblDSSP;
+    private javax.swing.JTable tblDanhSachNhanVien;
+    private javax.swing.JTextField txtSearch;
+    // End of variables declaration//GEN-END:variables
+}
